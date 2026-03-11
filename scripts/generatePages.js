@@ -10,104 +10,124 @@ const __dirname = path.dirname(__filename)
 const vectorsDir = path.join(__dirname, '..', 'public', 'vectors')
 const configPath = path.join(__dirname, '..', 'src', 'pagesConfig.js')
 
-// Default titles, subtitles, and layout for pages
+// 苦路三段敘事預設內容
 const defaultContent = {
-  page1: {
-    title: '',
-    subtitle: '',
-    layout: 'left' // 'left' or 'right'
+  cover: {
+    chapterNumber: 0,
+    title: '苦路',
+    subtitle: '耶穌受難之路',
+    body: '',
+    layout: 'center'
   },
-  page2: {
-    title: 'Chapter 1: Departure',
-    subtitle: 'The beginning of our adventure',
+  section1: {
+    chapterNumber: 1,
+    title: '審判',
+    subtitle: '從法庭到十字架之路的起點',
+    body: '比拉多把耶穌交給他們任意處置。耶穌背著自己的十字架走出去，踏上那條通向救贖的路。在沉重的重壓下，他跌倒又站起，而一個名叫西滿的陌生人被迫肩負起這份重量。',
     layout: 'right'
   },
-  page3: {
-    title: 'Chapter 2: The Crossing',
-    subtitle: 'Navigating through challenges',
+  section2: {
+    chapterNumber: 2,
+    title: '途中',
+    subtitle: '在苦路上相遇的人',
+    body: '一位婦女穿過人群，用布巾輕輕擦拭他的臉。耶穌再次跌倒，又再次站起。他抬起頭，對那些為他哭泣的婦女說：不要為我哭泣，要為你們自己和你們的子女哭泣。',
     layout: 'left'
   },
-  page4: {
-    title: 'Chapter 3: Discovery',
-    subtitle: 'Finding what we seek',
+  section3: {
+    chapterNumber: 3,
+    title: '途中',
+    subtitle: '在苦路上相遇的人',
+    body: '一位婦女穿過人群，用布巾輕輕擦拭他的臉。耶穌再次跌倒，又再次站起。他抬起頭，對那些為他哭泣的婦女說：不要為我哭泣，要為你們自己和你們的子女哭泣。',
+    layout: 'left'
+  },
+  section4: {
+    chapterNumber: 4,
+    title: '加爾瓦略山',
+    subtitle: '死亡，以及死亡之後',
+    body: '他們到了那個地方，把他釘在十字架上。黑暗籠罩大地。他大聲呼喊：父啊，我把我的靈魂交託在你手中。說完，他就斷氣了。沉默持續了整個夜晚，然而，死亡從來都不是故事的終點。',
     layout: 'right'
-  },
-  page5: {
-    title: 'Chapter 4: Return',
-    subtitle: 'Coming home changed',
-    layout: 'left'
   }
 }
 
 function generatePagesConfig() {
   try {
-    // Read all directories in vectors folder
     const pages = fs.readdirSync(vectorsDir, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name)
-      .sort() // Sort to ensure consistent order
+      .sort((a, b) => {
+        if (a === 'cover') return -1
+        if (b === 'cover') return 1
+        const aNum = parseInt(a.match(/\d+/)?.[0] || 0)
+        const bNum = parseInt(b.match(/\d+/)?.[0] || 0)
+        return aNum - bNum
+      })
 
     const config = pages.map(pageId => {
       const pageDir = path.join(vectorsDir, pageId)
       const files = fs.readdirSync(pageDir)
 
-      // Find background image
       const backgroundFile = files.find(file => file.startsWith('background.'))
       const background = backgroundFile ? `/vectors/${pageId}/${backgroundFile}` : null
 
-      // Find comic images (sorted numerically)
+      // 後綴決定顯示大小：_sm ×0.7  (無後綴) ×1.0  _lg ×1.4  _xl ×1.8
+      const SCALE_MAP = { sm: 0.7, lg: 1.4, xl: 1.8 }
+
       const comicFiles = files
-        .filter(file => file.startsWith('comic') && file.endsWith('.jpg'))
+        .filter(file => file.startsWith('comic'))
         .sort((a, b) => {
-          const aNum = parseInt(a.match(/comic(\d+)/)?.[1] || 0)
-          const bNum = parseInt(b.match(/comic(\d+)/)?.[1] || 0)
+          const aNum = parseInt(a.match(/\d+/)?.[0] || 0)
+          const bNum = parseInt(b.match(/\d+/)?.[0] || 0)
           return aNum - bNum
         })
-        .map(file => `/vectors/${pageId}/${file}`)
+        .map(file => {
+          const suffix = file.match(/_([a-z]+)\.[^.]+$/)?.[1]
+          return {
+            src: `/vectors/${pageId}/${file}`,
+            scale: SCALE_MAP[suffix] ?? 1.0
+          }
+        })
 
-      // Get title, subtitle, and layout
       const content = defaultContent[pageId] || {
-        title: `Page ${pageId.replace('page', '')}`,
-        subtitle: 'A new chapter begins',
+        chapterNumber: 99,
+        title: pageId,
+        subtitle: '',
+        body: '',
         layout: 'left'
       }
 
       return {
         id: pageId,
+        chapterNumber: content.chapterNumber,
         title: content.title,
         subtitle: content.subtitle,
+        body: content.body,
         layout: content.layout,
         background,
         comics: comicFiles
       }
     })
 
-    // Generate the config file content
-    const configContent = `// Auto-generated page configuration
-// This file is automatically updated when new pages are added to public/vectors/
+    const configContent = `// 苦路 — Way of the Cross
+// Auto-generated page configuration
 // Run: node scripts/generatePages.js
 
 export const pagesConfig = ${JSON.stringify(config, null, 2)}
 
-// Helper function to get page by ID
 export const getPageById = (id) => pagesConfig.find(page => page.id === id)
-
-// Helper function to get all page IDs
 export const getAllPageIds = () => pagesConfig.map(page => page.id)
 `
 
-    // Write the config file
     fs.writeFileSync(configPath, configContent, 'utf8')
-    console.log(`✅ Generated pagesConfig.js with ${config.length} pages:`)
+    console.log(`✅ 已生成 pagesConfig.js，共 ${config.length} 個頁面：`)
     config.forEach(page => {
-      console.log(`  - ${page.id}: ${page.comics.length} comics`)
+      const label = page.chapterNumber === 0 ? '封面' : `第${page.chapterNumber}段`
+      console.log(`  - ${page.id} (${label})：${page.comics.length} 張圖`)
     })
 
   } catch (error) {
-    console.error('❌ Error generating pages config:', error.message)
+    console.error('❌ 生成失敗：', error.message)
     process.exit(1)
   }
 }
 
-// Run the generator
 generatePagesConfig()

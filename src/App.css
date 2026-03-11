@@ -1,247 +1,387 @@
+/* ── Variables ─────────────────────────────────────────── */
+:root {
+  --brown-deep:  #1a0f08;   /* 深棕黑 - 主背景 */
+  --brown-mid:   #2c1a0e;   /* 中棕 */
+  --gold:        #c9a96e;
+  --gold-light:  #e2c48a;
+  --cream:       #f0e6d3;
+  --nav-height:  54px;
+}
+
 .app {
   width: 100%;
 }
 
-/* Scroll Sections */
-.scroll-section {
+/* ── Navigation Bar ─────────────────────────────────────── */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: rgba(20, 11, 6, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.18);
+}
+
+.nav-brand {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.nav-current {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: rgba(240, 230, 211, 0.6);
+  font-weight: 300;
+}
+
+/* ── Chapter Dots ───────────────────────────────────────── */
+.chapter-dots {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chapter-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.3);
+  border: 1px solid rgba(201, 169, 110, 0.45);
+  transition: background 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.chapter-dot:hover {
+  background: rgba(201, 169, 110, 0.65);
+  transform: scale(1.4);
+}
+
+.chapter-dot.active {
+  background: var(--gold);
+  transform: scale(1.6);
+}
+
+/* ── Cover Section ──────────────────────────────────────── */
+.cover-section {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: var(--brown-deep);
+}
+
+.cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 15, 8, 0.5) 0%,
+    rgba(26, 15, 8, 0.7) 60%,
+    rgba(26, 15, 8, 0.92) 100%
+  );
+  z-index: 2;
+  transition: backdrop-filter 0.25s ease-out, -webkit-backdrop-filter 0.25s ease-out;
+  will-change: backdrop-filter;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+  padding-top: var(--nav-height);
+}
+
+.cover-cross {
+  font-size: 2.8rem;
+  color: var(--gold);
+  opacity: 0.8;
+  margin-bottom: 24px;
+  animation: fadeDown 1.4s ease-out both;
+}
+
+.cover-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(5rem, 16vw, 11rem);
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: var(--cream);
+  line-height: 1;
+  margin: 0;
+  animation: fadeDown 1.4s ease-out 0.15s both;
+}
+
+.cover-rule {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.6;
+  margin: 28px auto 26px;
+  animation: fadeIn 1.4s ease-out 0.3s both;
+}
+
+.cover-subtitle {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+  letter-spacing: 0.35em;
+  color: var(--gold-light);
+  font-weight: 400;
+  margin: 0 0 18px;
+  animation: fadeIn 1.4s ease-out 0.4s both;
+}
+
+.cover-desc {
+  font-size: 0.88rem;
+  line-height: 2.1;
+  color: rgba(240, 230, 211, 0.5);
+  letter-spacing: 0.1em;
+  font-weight: 300;
+  margin: 0 0 48px;
+  animation: fadeIn 1.4s ease-out 0.55s both;
+}
+
+.cover-cta {
+  display: inline-block;
+  padding: 12px 38px;
+  border: 1px solid rgba(201, 169, 110, 0.5);
+  color: var(--gold-light);
+  font-size: 0.82rem;
+  letter-spacing: 0.28em;
+  text-decoration: none;
+  font-weight: 300;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  animation: fadeIn 1.4s ease-out 0.7s both;
+}
+
+.cover-cta:hover {
+  background: rgba(201, 169, 110, 0.1);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ── Scroll Sections ─────────────────────────────────────── */
+.scroll-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  background: var(--brown-deep);
 }
 
 .section-background {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 1;
+  /* 上下邊緣淡出，讓背景圖在 section 邊界自然消退而非硬截 */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 380px,
+    black calc(100% - 380px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 380px,
+    black calc(100% - 380px),
+    transparent 100%
+  );
 }
 
-/* Transition overlay for page reflections */
-.transition-overlay {
+.section-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 2;
-  pointer-events: none;
+  /* 均勻深色底層，壓住模糊背景，讓上層圖片清晰 */
+  background: rgba(26, 15, 8, 0.72);
+  /* 轉場時 backdrop-filter 由 JS 控制，transition 負責平滑 */
+  transition: backdrop-filter 0.25s ease-out, -webkit-backdrop-filter 0.25s ease-out;
+  will-change: backdrop-filter;
 }
 
-.prev-page-reflection,
-.next-page-reflection {
-  position: absolute;
-  width: 100%;
-  height: 20px;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-}
-
-.prev-page-reflection {
-  bottom: 0;
-  /* Show bottom 20px of previous page */
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-}
-
-.next-page-reflection {
+/* ── Ghost Chapter Number ───────────────────────────────── */
+.chapter-ghost {
+  position: sticky;
   top: 0;
-  /* Show top 20px of next page */
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
+  z-index: 3;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(30vw, 45vw, 55vw);
+  font-weight: 400;
+  color: rgba(44, 26, 14, 0.6);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  float: right;
+  margin-right: -0.05em;
+  margin-top: -0.05em;
 }
 
+/* ── Chapter Text Block ─────────────────────────────────── */
 .content-overlay {
   position: relative;
   z-index: 10;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
+  padding: calc(var(--nav-height) + 52px) 56px 0;
 }
 
-/* Hero Section - Mobile optimized */
-.hero-content {
+.chapter-text {
+  max-width: 540px;
+  /* Default: centered */
+  margin: 0 auto;
   text-align: center;
-  max-width: 90vw;
-  z-index: 10;
-  position: relative;
 }
 
-.hero-title {
-  font-size: 3rem;
+.chapter-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--cream);
+  line-height: 1.2;
+  margin: 0 0 14px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+.chapter-subtitle {
+  font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+  letter-spacing: 0.2em;
+  color: var(--gold);
   font-weight: 300;
-  letter-spacing: 2px;
-  margin-bottom: 15px;
-  animation: fadeInUp 1s ease-out;
-  color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0 0 24px;
 }
 
-.hero-subtitle {
-  font-size: 1.2rem;
+.chapter-body {
+  font-size: clamp(0.88rem, 1.4vw, 1rem);
+  line-height: 2;
+  color: rgba(240, 230, 211, 0.72);
   font-weight: 300;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 20px;
-  animation: fadeInUp 1s ease-out 0.2s both;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.06em;
+  margin: 0;
 }
 
-/* Story Content */
-.story-content {
-  max-width: 700px;
-  width: 100%;
-  animation: fadeIn 1s ease-out;
+/* ── Floating Comic Images ──────────────────────────────── */
+.floating-comic {
+  position: absolute;
+  z-index: 15;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, translate, scale;
+
+  /* 進場前：透明 + 往下偏移 + 縮小 */
+  opacity: 0;
+  translate: var(--enter-tx, 0px) var(--enter-ty, 30px);
+  scale: 0.86;
+  /* CSS Individual Transforms 控制進場；JS transform 控制 3D float，兩者獨立不衝突 */
+  transition:
+    opacity  0.95s ease-out,
+    translate 1s    cubic-bezier(0.22, 1, 0.36, 1),
+    scale    0.95s  cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.12s ease-out;
+
+  /* 四邊暈邊 */
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(to right,  transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-composite: intersect;
 }
 
-.text-container h2 {
-  font-size: 2.5rem;
-  font-weight: 300;
-  margin-bottom: 30px;
-  letter-spacing: 1px;
-  color: #ffffff;
+.floating-comic.comic-visible {
+  opacity: 0.95;
+  translate: var(--settled-tx, 0px) 0px;
+  scale: 1;
 }
 
-.text-container p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 25px;
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 300;
-  letter-spacing: 0.5px;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .text-container h2 {
-    font-size: 1.8rem;
-  }
-
-  .text-container p {
-    font-size: 1rem;
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .floating-comic {
+    left: 50% !important;
+    right: auto !important;
   }
 
   .content-overlay {
-    padding: 30px;
+    padding: 32px 24px 52px;
+  }
+
+  .chapter-text.layout-left,
+  .chapter-text.layout-right {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .chapter-dots {
+    display: none;
+  }
+
+  .nav-current {
+    font-size: 0.7rem;
   }
 }
 
-/* Floating comic images - Dynamic positioning based on layout and count */
-.floating-comic {
-  position: absolute;
+/* ── Scroll progress bar ─────────────────────────────────── */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--gold), var(--gold-light));
+  z-index: 200;
   pointer-events: none;
-  z-index: 15;
-  opacity: 0.95;
-  transform-style: preserve-3d;
-  will-change: transform;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: transform 0.1s ease-out;
 }
 
-/* Base positioning - will be overridden by JavaScript */
-.layout-left .floating-comic {
-  left: 0px; /* Touching left edge */
+/* ── Text reveal (title / subtitle) ────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.layout-right .floating-comic {
-  right: 0px; /* Touching right edge */
+/* ── Character-by-character body text ──────────────────── */
+.char-span {
+  opacity: 0.08;
+  /* No transition here — opacity set directly by scroll JS for precise control */
+  display: inline;
 }
 
-/* Mobile layout - Vertical stacking with dynamic spacing */
-@media (max-width: 767px) {
-  .layout-left .floating-comic,
-  .layout-right .floating-comic {
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%);
-  }
+/* ── Animations ─────────────────────────────────────────── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Desktop layout - Side positioning */
-@media (min-width: 768px) {
-  .layout-left .floating-comic {
-    left: 0px;
-    right: auto;
-  }
-
-  .layout-right .floating-comic {
-    right: 0px;
-    left: auto;
-  }
-}
-
-/* Additional responsive design - Mobile first */
-@media (min-width: 768px) {
-  .hero-title {
-    font-size: 4rem;
-    margin-bottom: 20px;
-  }
-
-  .hero-subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 60px;
-  }
-
-  .hero-content {
-    max-width: 800px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .comic-1 {
-    width: 65vw;
-    max-width: 250px;
-    top: 30%;
-  }
-
-  .comic-2 {
-    width: 65vw;
-    max-width: 250px;
-    top: 70%;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
