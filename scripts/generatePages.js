@@ -66,7 +66,7 @@ function generatePagesConfig() {
 
       // Background: file explicitly named background.*
       const backgroundFile = files.find(f => path.basename(f, path.extname(f)) === 'background')
-      const background = backgroundFile ? `/vectors/${sectionId}/${backgroundFile}` : null
+      const background = backgroundFile ? `vectors/${sectionId}/${backgroundFile}` : null
 
       // Comics: all image files that are NOT the background
       const comicFiles = files
@@ -74,7 +74,7 @@ function generatePagesConfig() {
           const ext = path.extname(f).toLowerCase()
           return IMAGE_EXTS.has(ext) && path.basename(f, ext) !== 'background'
         })
-        .map(f => ({ src: `/vectors/${sectionId}/${f}`, scale: 1 }))
+        .map(f => ({ src: `vectors/${sectionId}/${f}`, scale: 1 }))
 
       const meta = sectionMeta[sectionId] || {
         chapterNumber: chapterCounter,

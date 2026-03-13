@@ -8,7 +8,7 @@ function MusicPlayer() {
   const audioRef = useRef(null)
 
   useEffect(() => {
-    audioRef.current = new Audio('/sound/cello.mp3')
+    audioRef.current = new Audio('sound/cello.mp3')
     audioRef.current.loop = true
     audioRef.current.volume = 0.5
     return () => {
