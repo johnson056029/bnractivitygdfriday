@@ -1,0 +1,19 @@
+{
+  "[project]/components/StarScene.js [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/components/StarScene.js [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_three_build_three_core_996ef05a.js",
+      "static/chunks/node_modules_three_build_three_module_0c59ee63.js",
+      "static/chunks/components_StarScene_c79de113.js",
+      "static/chunks/components_StarScene_5a4daf1c.js"
+    ]
+  },
+  "[project]/components/ImageScroll.js [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/components/ImageScroll.js [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_gsap_f48a6384._.js",
+      "static/chunks/components_ImageScroll_2df6b042.js",
+      "static/chunks/components_ImageScroll_5a4daf1c.js"
+    ]
+  }
+}

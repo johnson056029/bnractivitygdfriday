@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///Users/johnson/Desktop/bnrgdfriday/jill/good-friday-evening-service/app/globals.css"],"sourcesContent":["* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background-color: #000;\n  overflow-x: hidden;\n}\n"],"names":[],"mappings":"AAAA;;;;;;AAMA"}}]
+}
