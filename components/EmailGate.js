@@ -36,11 +36,15 @@ export default function EmailGate({ onUnlock }) {
           .join("&");
       }
 
-      await fetch("/", {
+      const response = await fetch("/__forms.html", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({ "form-name": "email-gate", "email": email })
       })
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
 
       setStatus('success')
       setMessage('感謝您的參與！')
